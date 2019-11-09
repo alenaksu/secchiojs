@@ -11,7 +11,7 @@
         "build": "npm run clear && tsc --build"
     },
     "author": "alenaksu",
-    "repository": "alenaksu/tiny-lit",
+    "repository": "alenaksu/secchiojs",
     "license": "MIT",
     "keywords": [
         "web storage",
