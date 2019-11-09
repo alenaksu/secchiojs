@@ -2,22 +2,22 @@ export type BucketOptions = {
     storage?: Storage;
     version?: number;
     expire?: number;
-    defaultValue?: any;
+    defaultValue?: unknown;
 };
 
 export type BucketEntry = {
     version: number;
     timestamp: number;
-    data: any;
+    data: unknown;
 };
 
-export type Bucket = [() => any, (value: any) => void, () => void];
+export type Bucket<T> = [() => T, (value: T) => void, () => void];
 
 const defer =
     (window as any).requestIdleCallback || window.requestAnimationFrame;
 
 const isExpired = (entry: BucketEntry, expire: number = 0) =>
-    expire && entry.timestamp + expire < Date.now();
+    !!expire && entry.timestamp + expire < Date.now();
 
 const isSameVersion = (entry: BucketEntry, version: number) =>
     entry.version === version;
@@ -39,10 +39,10 @@ const setItem = (
 };
 
 const getItem = (key: string, options: BucketOptions, cached: BucketEntry) => {
-    const { storage, version } = options;
+    const { storage, version, expire } = options;
 
     const entry = !cached ? JSON.parse(storage.getItem(key)) : cached;
-    if (!entry || isExpired(entry) || !isSameVersion(entry, version)) {
+    if (!entry || isExpired(entry, expire) || !isSameVersion(entry, version)) {
         removeItem(key, options);
         return null;
     }
@@ -51,10 +51,10 @@ const getItem = (key: string, options: BucketOptions, cached: BucketEntry) => {
 };
 
 const removeItem = (key: string, { storage }: BucketOptions) => {
-    storage.removeItem(key);
+    defer(() => storage.removeItem(key));
 };
 
-export function getBucket(name: string, options?: BucketOptions): Bucket {
+export function getBucket<T>(name: string, options?: BucketOptions): Bucket<T> {
     options = {
         storage: localStorage,
         ...options,
