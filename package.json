@@ -6,11 +6,12 @@
     "types": "lib/index.d.ts",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "release": "semantic-release --no-ci",
+        "release": "semantic-release --no-ci -r git@github.com:alenaksu/secchiojs.git",
         "clear": "rimraf lib/",
         "build": "npm run clear && tsc --build"
     },
     "author": "alenaksu",
+    "repository": "alenaksu/tiny-lit",
     "license": "MIT",
     "keywords": [
         "web storage",
