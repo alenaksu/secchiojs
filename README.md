@@ -12,24 +12,62 @@ npm install secchiojs
 
 ## Usage
 
+### Typescript
+
+```ts
+import { getBucket } from 'secchiojs';
+
+type UserPrefs = {
+    name: string;
+    email: string;
+    mode: number;
+};
+
+const [getPrefs, updatePrefs, deletePrefs] = getBucket<UserPrefs>(
+    'user-prefs',
+    {
+        version: 1,
+        defaultValue: {},
+        storage: localStorage,
+        expire: 3600,
+    }
+);
+
+const userPrefs = getPrefs();
+
+updatePrefs({
+    ...userPrefs,
+    mode: 2,
+});
+
+deletePrefs();
+```
+
+### Javascript
+
 ```js
 import { getBucket } from 'secchiojs';
 
-const [getToken, setToken, deleteToken] = getBucket('application-token', {
+const [getPrefs, updatePrefs, deletePrefs] = getBucket('user-prefs', {
     version: 1,
-    defaultValue: '',
+    defaultValue: {},
     storage: localStorage,
     expire: 3600,
 });
 
-const token = getToken();
+const userPrefs = getPrefs();
 
-setToken('...');
+updatePrefs({
+    ...userPrefs,
+    mode: 2,
+});
 
-deleteToken();
+deletePrefs();
 ```
 
 ## API
+
+**NOTE**: All the operations are performed using a cache, deferring the actual operations to the storage.
 
 ### getBucket
 
@@ -43,7 +81,16 @@ deleteToken();
 The function returns an array containing get, set and remove methods.
 
 ```ts
-export type Bucket = [() => any, (value: any) => void, () => void];
+export type Bucket<T> = [
+    // get
+    () => T,
+
+    // set
+    (value: T) => void,
+
+    // remove
+    () => void
+];
 ```
 
 ### BucketOptions
