@@ -1,4 +1,9 @@
 # secchiojs
+[![GitHub release](https://img.shields.io/github/v/release/alenaksu/secchiojs.svg)](https://github.com/alenaksu/secchiojs/releases)
+[![npm](https://badgen.net/npm/v/secchiojs)](https://www.npmjs.com/package/secchiojs)
+[![downloads](https://badgen.net/npm/dt/secchiojs)](https://www.npmjs.com/package/secchiojs)
+[![Known Vulnerabilities](https://snyk.io/test/npm/secchiojs/badge.svg)](https://snyk.io/test/npm/@alenaksu/json-viewer)
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/alenaksu/json-viewer/master/LICENSE)
 
 Enhanced Web Storage API
 
