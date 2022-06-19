@@ -9,10 +9,18 @@
             }
         ],
         [
+            "@semantic-release/npm",
+            {
+                "npmPublish": false,
+                "tarballDir": "lib"
+            }
+        ],
+        [
             "@semantic-release/git",
             {
                 "assets": [
-                    "docs/CHANGELOG.md"
+                    "docs/CHANGELOG.md",
+                    "package.json"
                 ],
                 "message": "chore(release): bump version ${nextRelease.version} \n\n${nextRelease.notes}"
             }
