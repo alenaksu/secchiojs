@@ -8,12 +8,6 @@
                 "changelogFile": "docs/CHANGELOG.md"
             }
         ],
-        [
-            "@semantic-release/exec",
-            {
-                "prepareCmd": "npm run build"
-            }
-        ],
         "@semantic-release/git",
         {
             "message": "chore(release): bump version ${nextRelease.version} \n\n${nextRelease.notes}"
