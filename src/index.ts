@@ -1,20 +1,17 @@
-export type BucketOptions = {
+export type BucketOptions<T = unknown> = {
     storage?: Storage;
     version?: number;
     expire?: number;
-    defaultValue?: unknown;
+    defaultValue?: T;
 };
 
-export type BucketEntry = {
+export type BucketEntry<T = unknown> = {
     version: number;
     timestamp: number;
-    data: unknown;
+    data: T;
 };
 
 export type Bucket<T> = [() => T, (value: T) => void, () => void];
-
-const defer =
-    (window as any).requestIdleCallback || window.requestAnimationFrame;
 
 const isExpired = (entry: BucketEntry, expire: number = 0) =>
     !!expire && entry.timestamp + expire < Date.now();
@@ -22,9 +19,9 @@ const isExpired = (entry: BucketEntry, expire: number = 0) =>
 const isSameVersion = (entry: BucketEntry, version: number) =>
     entry.version === version;
 
-const setItem = (
+const setItem = <T>(
     key: string,
-    data: any,
+    data: T,
     { version, storage }: BucketOptions
 ) => {
     const entry: BucketEntry = {
@@ -33,15 +30,15 @@ const setItem = (
         version,
     };
 
-    defer(() => storage.setItem(key, JSON.stringify(entry)));
+    storage.setItem(key, JSON.stringify(entry));
 
     return entry;
 };
 
-const getItem = (key: string, options: BucketOptions, cached: BucketEntry) => {
+const getItem = <T>(key: string, options: BucketOptions): BucketEntry<T> | null => {
     const { storage, version, expire } = options;
 
-    const entry = !cached ? JSON.parse(storage.getItem(key)) : cached;
+    const entry = JSON.parse(storage.getItem(key));
     if (!entry || isExpired(entry, expire) || !isSameVersion(entry, version)) {
         removeItem(key, options);
         return null;
@@ -50,29 +47,27 @@ const getItem = (key: string, options: BucketOptions, cached: BucketEntry) => {
     return entry;
 };
 
-const removeItem = (key: string, { storage }: BucketOptions) => {
-    defer(() => storage.removeItem(key));
+const removeItem = <T>(key: string, { storage }: BucketOptions<T>) => {
+    storage.removeItem(key);
 };
 
-export function getBucket<T>(name: string, options?: BucketOptions): Bucket<T> {
+export function getBucket<T>(name: string, options?: BucketOptions<T>): Bucket<T> {
     options = {
         storage: localStorage,
         ...options,
     };
-    let cached = null;
 
     return [
         () => {
-            cached = getItem(name, options, cached);
+            const entry = getItem<T>(name, options);
 
-            return cached ? cached.data : options.defaultValue;
+            return entry ? entry.data : options.defaultValue;
         },
-        (value: any) => {
-            cached = setItem(name, value, options);
+        (value: T) => {
+            setItem<T>(name, value, options);
         },
         () => {
-            removeItem(name, options);
-            cached = null;
+            removeItem<T>(name, options);
         },
     ];
 }
