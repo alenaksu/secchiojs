@@ -8,9 +8,14 @@
                 "changelogFile": "docs/CHANGELOG.md"
             }
         ],
-        "@semantic-release/git",
-        {
-            "message": "chore(release): bump version ${nextRelease.version} \n\n${nextRelease.notes}"
-        }
+        [
+            "@semantic-release/git",
+            {
+                "assets": [
+                    "docs/CHANGELOG.md"
+                ],
+                "message": "chore(release): bump version ${nextRelease.version} \n\n${nextRelease.notes}"
+            }
+        ]
     ]
 }
