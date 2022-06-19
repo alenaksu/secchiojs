@@ -20,7 +20,7 @@
                 "assets": [
                     "docs/CHANGELOG.md",
                     "package.json",
-                    "package-lock-json"
+                    "package-lock.json"
                 ],
                 "message": "chore(release): bump version ${nextRelease.version} \n\n${nextRelease.notes}"
             }
