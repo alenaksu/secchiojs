@@ -14,12 +14,9 @@
                 "prepareCmd": "npm run build"
             }
         ],
-        "@semantic-release/npm",
-        [
-            "@semantic-release/git",
-            {
-                "message": "chore(release): bump version ${nextRelease.version} \n\n${nextRelease.notes}"
-            }
-        ]
+        "@semantic-release/git",
+        {
+            "message": "chore(release): bump version ${nextRelease.version} \n\n${nextRelease.notes}"
+        }
     ]
 }

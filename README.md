@@ -72,8 +72,6 @@ deletePrefs();
 
 ## API
 
-**NOTE**: All the operations are performed using a cache, deferring the actual operations to the storage.
-
 ### getBucket
 
 #### Parameters
